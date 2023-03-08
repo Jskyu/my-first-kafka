@@ -23,7 +23,6 @@ public class KafkaConnectTest {
     private String producerHost;
 
     private final String TOPIC = "test-topic";
-    String s = "quickstart-events";
 
     @Test
     public void producerTest() {
