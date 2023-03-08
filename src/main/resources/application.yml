@@ -4,3 +4,17 @@ server:
 spring:
   mvc.view:
       suffix: .html
+
+  kafka:
+    consumer:
+      bootstrap-servers: 192.168.1.90:9092
+      group-id: quickstart-events
+      auto-offset-reset: earliest
+      key-deserializer: org.apache.kafka.common.serialization.StringSerializer
+      value-deserializer: org.apache.kafka.common.serialization.StringSerializer
+
+    producer:
+      bootstrap-servers: 192.168.1.90:9092
+      acks: all
+      key-serializer: org.apache.kafka.common.serialization.StringSerializer
+      value-serializer: org.apache.kafka.common.serialization.StringSerializer
