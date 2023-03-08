@@ -2,6 +2,103 @@
   text-align: center;
 }
 
+.contents {
+  display: inline-block;
+  margin-top: 10px;
+  width: 900px;
+}
+
+.brick {
+  background: #fff;
+  overflow: hidden;
+  margin-bottom: 20px;
+  -moz-border-radius: 2px;
+  -webkit-border-radius: 2px;
+  border-radius: 2px;
+  position: relative;
+  -moz-hyphens: auto;
+  -ms-hyphens: auto;
+  -webkit-hyphens: auto;
+  hyphens: auto;
+  -moz-box-shadow: 0 2px 5px 0 rgba(0, 0, 0, .1), 0 2px 5px 0 transparent;
+  -webkit-box-shadow: 0 2px 5px 0 rgba(0, 0, 0, .1), 0 2px 5px 0 transparent;
+  box-shadow: 0 2px 5px 0 rgba(0, 0, 0, .1), 0 2px 5px 0 transparent;
+  -moz-transition: box-shadow 250ms ease;
+  -o-transition: box-shadow 250ms ease;
+  -webkit-transition: box-shadow 250ms ease;
+  transition: box-shadow 250ms ease;
+}
+
+.brick:hover {
+  -moz-box-shadow: 0 2px 10px 0 #a1a1a1;
+  -webkit-box-shadow: 0 2px 10px 0 #a1a1a1, 0 2px 5px 0 transparent;
+  box-shadow: 0 2px 10px 0 #a1a1a1, 0 2px 5px 0 transparent;
+}
+
+.left {
+  float: left;
+  width: 48%;
+}
+
+.right {
+  float: right;
+  width: 48%;
+}
+
+.box {
+  hyphens: auto;
+  -moz-box-shadow: 0 2px 5px 0 rgba(0, 0, 0, .1), 0 2px 5px 0 transparent;
+  -webkit-box-shadow: 0 2px 5px 0 rgba(0, 0, 0, .1), 0 2px 5px 0 transparent;
+  box-shadow: 0 2px 5px 0 rgba(0, 0, 0, .1), 0 2px 5px 0 transparent;
+  -moz-hyphens: auto;
+  -ms-hyphens: auto;
+  margin: 20px;
+  transition: box-shadow 250ms ease;
+
+}
+
+.box:hover {
+  -moz-box-shadow: 0 2px 10px 0 #a1a1a1;
+  -webkit-box-shadow: 0 2px 10px 0 #a1a1a1, 0 2px 5px 0 transparent;
+  box-shadow: 0 2px 10px 0 #a1a1a1, 0 2px 5px 0 transparent;
+}
+
+.btn-right {
+  float: right;
+}
+
+.modal {
+  margin-top: 20px;
+  padding: 20px;
+  background: #eee;
+  text-align: left;
+}
+
+.post-title {
+  cursor: pointer;
+}
+
+.button-cursor {
+  cursor: pointer;
+}
+
+div{
+  box-sizing: border-box;
+}
+
+.list {
+  padding-left: 20px;
+  text-align: left;
+  border-bottom: 1px solid grey;
+}
+.black-nav {
+  display: flex;
+  background: darkgrey;
+  width: 100%;
+  color: white;
+  padding-left: 20px;
+}
+
 .App-logo {
   height: 40vmin;
   pointer-events: none;

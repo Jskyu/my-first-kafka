@@ -12,24 +12,28 @@ import org.springframework.web.bind.annotation.*;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Map;
 
 @RestController
-@RequestMapping("/kafka")
 @RequiredArgsConstructor
 public class KafkaController {
 
-    private final KafkaProducer<String, String> producer;
+    private final KafkaProducer<String, Object> producer;
     private final KafkaConsumer<String, Object> consumer;
 
     //토픽을 N개 사용할 시 로직 개선이 필요할듯 함.
     @Value("${spring.kafka.consumer.group-id}")
     private String topic;
 
-    @PostMapping("/send")
-    public String sendMessage(@RequestParam(name = "message") String message) {
-        producer.send(new ProducerRecord<>(topic, message));
-
-        return "success";
+    @PostMapping("/kafka/send")
+    public String sendMessage(@RequestBody Map<String, Object> paramMap) {
+        Object message = paramMap.getOrDefault("message", "");
+        if("".equals(message)) {
+            return "failed";
+        } else {
+            producer.send(new ProducerRecord<>(topic, message));
+            return "success";
+        }
     }
 
     @GetMapping("/get")
