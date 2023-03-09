@@ -1,37 +1,33 @@
 package jsk.kafka.service;
 
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.kafka.clients.consumer.Consumer;
 import org.apache.kafka.clients.consumer.ConsumerRecord;
 import org.apache.kafka.clients.consumer.ConsumerRecords;
-import org.apache.kafka.clients.consumer.KafkaConsumer;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.kafka.listener.KafkaMessageListenerContainer;
+import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.stereotype.Service;
 
+import java.time.Duration;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
 @Service
 @Slf4j
+@RequiredArgsConstructor
 public class KafConsumerService {
 
-    private final KafkaConsumer<String, Object> kafkaConsumer;
-
-    @Qualifier
-    public final KafkaMessageListenerContainer<String, Object> kafkaMessageListenerContainer;
-
-    @Autowired
-    public KafConsumerService(KafkaConsumer<String, Object> kafkaConsumer, KafkaMessageListenerContainer<String, Object> kafkaMessageListenerContainer) {
-        this.kafkaConsumer = kafkaConsumer;
-        this.kafkaMessageListenerContainer = kafkaMessageListenerContainer;
-        this.kafkaMessageListenerContainer.start();
-    }
+    private final Consumer<String, String> consumer;
 
     @Value("${spring.kafka.consumer.topic}")
     private String DEFAULT_TOPIC;
+
+    @KafkaListener(topics = "test-topic", groupId = "test")
+    public void listenGroupTest(String message) {
+        log.info("KafConsumerService.listenGroupTest() Consumed Message : {}", message);
+    }
 
     public List<Object> getMessageByTopic(String ...topics) {
         if (topics.length == 0) {
@@ -39,12 +35,12 @@ public class KafConsumerService {
         }
 
         List<String> topicList = List.of(topics);
-        kafkaConsumer.subscribe(topicList);
-        ConsumerRecords<String, Object> records = kafkaConsumer.poll(500);
+        consumer.subscribe(topicList);
+        ConsumerRecords<String, String> records = consumer.poll(Duration.ofMillis(500));
 
         List<Object> list = new ArrayList<>();
 
-        for (ConsumerRecord<String, Object> record : records) {
+        for (ConsumerRecord<String, String> record : records) {
             if (topicList.contains(record.topic())) {
                 list.add(record.value());
             }

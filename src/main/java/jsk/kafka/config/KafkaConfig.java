@@ -1,8 +1,8 @@
 package jsk.kafka.config;
 
 import lombok.extern.slf4j.Slf4j;
+import org.apache.kafka.clients.consumer.Consumer;
 import org.apache.kafka.clients.consumer.ConsumerConfig;
-import org.apache.kafka.clients.consumer.KafkaConsumer;
 import org.apache.kafka.clients.producer.KafkaProducer;
 import org.apache.kafka.clients.producer.ProducerConfig;
 import org.apache.kafka.common.serialization.StringDeserializer;
@@ -10,11 +10,10 @@ import org.apache.kafka.common.serialization.StringSerializer;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.kafka.annotation.EnableKafka;
+import org.springframework.kafka.config.ConcurrentKafkaListenerContainerFactory;
 import org.springframework.kafka.core.ConsumerFactory;
 import org.springframework.kafka.core.DefaultKafkaConsumerFactory;
-import org.springframework.kafka.listener.ContainerProperties;
-import org.springframework.kafka.listener.KafkaMessageListenerContainer;
-import org.springframework.kafka.listener.MessageListener;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -22,6 +21,7 @@ import java.util.Properties;
 
 @Configuration
 @Slf4j
+@EnableKafka
 public class KafkaConfig {
 
     @Value("${spring.kafka.producer.bootstrap-servers}")
@@ -34,7 +34,7 @@ public class KafkaConfig {
     private String groupId;
 
     @Bean(name = "kafkaProducer")
-    public KafkaProducer<String, Object> kafkaProducer(){
+    public KafkaProducer<String, String> kafkaProducer(){
         Properties configs = new Properties();
         configs.put(ProducerConfig.BOOTSTRAP_SERVERS_CONFIG, producerHost); // kafka host 및 server 설정
         configs.put(ProducerConfig.ACKS_CONFIG, "all");                         // 자신이 보낸 메시지에 대해 카프카로부터 확인을 기다리지 않습니다.
@@ -45,35 +45,27 @@ public class KafkaConfig {
     }
 
     @Bean(name = "kafkaConsumer")
-    public KafkaConsumer<String, Object> kafkaConsumer() {
-        return new KafkaConsumer<>(consumerProperties());
+    public Consumer<String, String> kafkaConsumer() {
+        return consumerFactory().createConsumer(groupId);
     }
 
-    private Map<String, Object> consumerProperties(){
-        Map<String, Object> configs = new HashMap<>();
-        configs.put(ConsumerConfig.BOOTSTRAP_SERVERS_CONFIG, consumerHost); // kafka host 및 server 설정
-        configs.put(ConsumerConfig.SESSION_TIMEOUT_MS_CONFIG, "10000");     // session 설정
-        configs.put(ConsumerConfig.GROUP_ID_CONFIG, groupId);   // topic 설정
-        configs.put(ConsumerConfig.KEY_DESERIALIZER_CLASS_CONFIG, StringDeserializer.class);    // key deserializer
-        configs.put(ConsumerConfig.VALUE_DESERIALIZER_CLASS_CONFIG, StringDeserializer.class);  // value deserializer
-        return configs;
+    @Bean
+    public ConsumerFactory<String, String> consumerFactory() {
+        Map<String, Object> props = new HashMap<>();
+        props.put(ConsumerConfig.BOOTSTRAP_SERVERS_CONFIG, consumerHost);
+        props.put(ConsumerConfig.GROUP_ID_CONFIG, groupId);
+        props.put(ConsumerConfig.KEY_DESERIALIZER_CLASS_CONFIG, StringDeserializer.class);
+        props.put(ConsumerConfig.VALUE_DESERIALIZER_CLASS_CONFIG, StringDeserializer.class);
+        props.put(ConsumerConfig.SESSION_TIMEOUT_MS_CONFIG, "10000");     // session 설정=
+
+        return new DefaultKafkaConsumerFactory<>(props);
     }
 
-    /* message listener */
-    //FIXME DO NOT WORKING
-    @Bean(name = "kafkaMessageListenerContainer")
-    public KafkaMessageListenerContainer<String, Object> kafkaMessageListenerContainer() {
+    @Bean
+    public ConcurrentKafkaListenerContainerFactory<String, String> kafkaListenerContainerFactory() {
 
-        ContainerProperties containerProperties = new ContainerProperties("test");
-        containerProperties.setMessageListener((MessageListener<String, Object>) (data) -> {
-            log.info("Listener Consumed Message : " + data.value());
-        });
-
-        ConsumerFactory<String, Object> consumerFactory = new DefaultKafkaConsumerFactory<>(consumerProperties());
-        KafkaMessageListenerContainer<String, Object> listenerContainer = new KafkaMessageListenerContainer<>(consumerFactory, containerProperties);
-        listenerContainer.setAutoStartup(false);
-        listenerContainer.setBeanName("kafka-message-listener");
-
-        return listenerContainer;
+        ConcurrentKafkaListenerContainerFactory<String, String> factory = new ConcurrentKafkaListenerContainerFactory<>();
+        factory.setConsumerFactory(consumerFactory());
+        return factory;
     }
 }
