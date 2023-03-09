@@ -22,12 +22,12 @@ public class KafkaController {
     private String topic;
 
     @PostMapping("/send")
-    public String sendMessage(@RequestBody Map<String, Object> paramMap) {
-        Object message = paramMap.getOrDefault("message", "");
+    public String sendMessage(@RequestBody Map<String, String> paramMap) {
+        String message = paramMap.getOrDefault("message", "");
         if("".equals(message)) {
             return "failed";
         } else {
-            producerService.sendMessage(message, topic);
+            producerService.sendMessage1(message, topic);
             return "success";
         }
     }
