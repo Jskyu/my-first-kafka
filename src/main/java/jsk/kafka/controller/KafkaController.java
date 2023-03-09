@@ -15,6 +15,7 @@ import java.util.List;
 import java.util.Map;
 
 @RestController
+@RequestMapping("/kafka")
 @RequiredArgsConstructor
 public class KafkaController {
 
@@ -25,7 +26,7 @@ public class KafkaController {
     @Value("${spring.kafka.consumer.group-id}")
     private String topic;
 
-    @PostMapping("/kafka/send")
+    @PostMapping("/send")
     public String sendMessage(@RequestBody Map<String, Object> paramMap) {
         Object message = paramMap.getOrDefault("message", "");
         if("".equals(message)) {

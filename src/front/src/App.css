@@ -54,7 +54,7 @@
   -ms-hyphens: auto;
   margin: 20px;
   transition: box-shadow 250ms ease;
-
+  min-height: 50px;
 }
 
 .box:hover {
