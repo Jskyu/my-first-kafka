@@ -99,6 +99,10 @@ div{
   padding-left: 20px;
 }
 
+input[type=text] {
+  margin: 20px 5px;
+}
+
 .App-logo {
   height: 40vmin;
   pointer-events: none;

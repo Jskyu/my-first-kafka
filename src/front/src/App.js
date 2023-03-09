@@ -6,10 +6,13 @@ function App() {
     const logo = 'My First Kafka';
 
     let [data, setData] = useState([]);
+    let isDo = false;
 
     useEffect(() => {
         let interval = setInterval(() => {
-            getMessage();
+            if (isDo) {
+                getMessage();
+            }
         }, 3000);
 
         return () => {
@@ -42,14 +45,13 @@ function App() {
     };
 
     const getMessage = () => {
-        console.log('get');
         const topic = 'test-topic';
         const url = 'http://localhost:8080/kafka/get?topic=' + topic;
 
         axios.get(url)
             .then((res) => {
                 if (res.status === 200) {
-                    let copy = [...data, res.data];
+                    let copy = [...data, ...res.data];
                     setData(copy);
                 }
             })
@@ -71,14 +73,20 @@ function App() {
             </div>
             <div className="contents">
                 <div className="left brick">
-                    <h1>producer</h1>
-                    <input type={"text"} id='proInput' onKeyDown={(e) => onKeyPressEnter(e)}/>
+                    <h1>Producer</h1>
+                    <input type={"text"} id='proInput' placeholder="input data" onKeyDown={(e) => onKeyPressEnter(e)}/>
                     <button onClick={() => sendMessage()}>전송</button>
                 </div>
                 <div className="right brick">
-                    <h1>consumer</h1>
+                    <h1>Consumer</h1>
+                    <div className="pretty p-switch p-fill">
+                        <input name="start_stat" type="checkbox" onChange={(e) => {isDo = e.target.checked;}}/>
+                        <div className="state p-success">
+                            <label>start</label>
+                        </div>
+                    </div>
 
-                    <h2>datas</h2>
+                    <h2>DATA</h2>
                     <div className={'box'}>
                         {data.map((item, idx) => {
                             return (
