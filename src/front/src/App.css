@@ -55,6 +55,8 @@
   margin: 20px;
   transition: box-shadow 250ms ease;
   min-height: 50px;
+  padding: 1px 10px;
+  text-align: left;
 }
 
 .box:hover {

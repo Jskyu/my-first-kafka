@@ -10,7 +10,6 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.kafka.listener.KafkaMessageListenerContainer;
 import org.springframework.stereotype.Service;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -34,8 +33,8 @@ public class KafConsumerService {
     @Value("${spring.kafka.consumer.topic}")
     private String DEFAULT_TOPIC;
 
-    public List<Object> getMessageByTopic(String ...topics){
-        if(topics.length == 0) {
+    public List<Object> getMessageByTopic(String ...topics) {
+        if (topics.length == 0) {
             return Collections.emptyList();
         }
 

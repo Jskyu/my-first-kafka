@@ -82,7 +82,7 @@ function App() {
                     <div className="pretty p-switch p-fill">
                         <input name="start_stat" type="checkbox" onChange={(e) => {setDo(e.target.checked);}}/>
                         <div className="state p-success">
-                            <label>start</label>
+                            <label>통신 OFF/ON</label>
                         </div>
                     </div>
 
