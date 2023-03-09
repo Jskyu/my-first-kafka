@@ -6,7 +6,7 @@ function App() {
     const logo = 'My First Kafka';
 
     let [data, setData] = useState([]);
-    let isDo = false;
+    let [isDo, setDo] = useState(false);
 
     useEffect(() => {
         let interval = setInterval(() => {
@@ -80,7 +80,7 @@ function App() {
                 <div className="right brick">
                     <h1>Consumer</h1>
                     <div className="pretty p-switch p-fill">
-                        <input name="start_stat" type="checkbox" onChange={(e) => {isDo = e.target.checked;}}/>
+                        <input name="start_stat" type="checkbox" onChange={(e) => {setDo(e.target.checked);}}/>
                         <div className="state p-success">
                             <label>start</label>
                         </div>
