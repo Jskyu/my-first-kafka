@@ -33,8 +33,8 @@ public class KafkaController {
     }
 
     @GetMapping("/get")
-    public List<Object> getMessage(@RequestParam(name = "topic", required = true) String topic) {
-        List<Object> list = consumerService.getMessageByTopic(topic);
+    public List<String> getMessage(@RequestParam(name = "topic", required = true) String topic) {
+        List<String> list = consumerService.getMessageByTopic(topic);
 
         return list;
     }

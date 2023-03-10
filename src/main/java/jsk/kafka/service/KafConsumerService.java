@@ -29,7 +29,7 @@ public class KafConsumerService {
         log.info("KafConsumerService.listenGroupTest() Consumed Message : {}", message);
     }
 
-    public List<Object> getMessageByTopic(String ...topics) {
+    public List<String> getMessageByTopic(String ...topics) {
         if (topics.length == 0) {
             return Collections.emptyList();
         }
@@ -38,7 +38,7 @@ public class KafConsumerService {
         consumer.subscribe(topicList);
         ConsumerRecords<String, String> records = consumer.poll(Duration.ofMillis(500));
 
-        List<Object> list = new ArrayList<>();
+        List<String> list = new ArrayList<>();
 
         for (ConsumerRecord<String, String> record : records) {
             if (topicList.contains(record.topic())) {

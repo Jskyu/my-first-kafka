@@ -24,7 +24,7 @@ public class KafConsumerServiceTest {
     public void getMessageByTopicTest(){
         //Given
         String topic = TOPIC;
-        List<Object> list = Collections.emptyList();
+        List<String> list = Collections.emptyList();
         //When
         try {
             list = kafConsumerService.getMessageByTopic(topic);
